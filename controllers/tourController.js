@@ -164,21 +164,14 @@ exports.getMonthlyPlan = async (req, res) => {
       {
         $match: {
           startDates: {
-            $gte: `${year}-01-01`,
-            $lte: `${year}-12-31`
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`)
           }
         }
       },
       {
         $group: {
-          _id: {
-            $month: {
-              $dateFromString: {
-                dateString: '$startDates',
-                format: '%Y-%m-%d,%H:%M'
-              }
-            }
-          },
+          _id: { $month: '$startDates' },
           numTourStarts: { $sum: 1 },
           tours: { $push: '$name' }
         }
